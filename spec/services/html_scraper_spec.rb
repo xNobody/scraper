@@ -9,6 +9,12 @@ describe HtmlScraper do
       rating_value: '.ratingValue'
     }
   end
+
+  before do
+    html_content = File.read(fixture_path)
+    allow(URI).to receive(:open).and_return(StringIO.new(html_content))
+  end
+
   let(:result) { described_class.call(url: fixture_path, fields: fields) }
 
   describe 'scraping from local HTML' do
