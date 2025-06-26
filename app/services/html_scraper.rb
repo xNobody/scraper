@@ -4,10 +4,12 @@ require "cgi"
 
 class HtmlScraper
   def self.call(url:, fields:)
-    api_key = "46cd9258e9e1e2a892d1e5e40a6135bd" # or use ENV
+    api_key = "46cd9258e9e1e2a892d1e5e40a6135bd"
     proxy_url = "https://api.scraperapi.com?api_key=#{api_key}&url=#{CGI.escape(url)}"
 
-    html = URI.open(proxy_url).read
+    html = Rails.cache.fetch("scraper:#{url}", expires_in: 10.minutes) do
+      URI.open(proxy_url).read
+    end
     doc = Nokogiri::HTML.parse(html)
 
     result = fields.each_with_object({}) do |(key, selector_or_names), out|
