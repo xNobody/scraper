@@ -33,8 +33,7 @@ group :development, :test do
   gem "debug", platforms: %i[ mri mswin mswin64 mingw x64_mingw ], require: "debug/prelude"
   gem "brakeman", require: false
   gem "rubocop-rails-omakase", require: false
-
-  # Add these:
+  gem "rubocop-rspec", require: false
   gem "rspec-rails"
   gem "factory_bot_rails"
   gem "faker"

@@ -1,5 +1,7 @@
 require 'rails_helper'
 
+Rails.cache = ActiveSupport::Cache.lookup_store(:memory_store)
+
 describe HtmlScraper do
   let(:fixture_path) { Rails.root.join('spec/fixtures/alza_product.html').to_s }
   let(:html_content) { File.read(fixture_path) }
@@ -48,12 +50,27 @@ describe HtmlScraper do
   end
 
   describe 'caching behavior' do
-    it 'uses Rails.cache to store HTML content' do
-      expect(Rails.cache).to receive(:fetch)
-        .with("scraper:#{url}", expires_in: 10.minutes)
-        .and_call_original
+    before do
+      allow(Rails.cache).to receive(:fetch).and_call_original
+    end
 
+    it 'uses Rails.cache to store HTML content' do
       described_class.call(url: url, fields: css_fields)
+      expect(Rails.cache).to have_received(:fetch)
+        .with("scraper:#{url}", expires_in: 10.minutes)
+    end
+
+    context 'when HTML is already cached' do
+      before do
+        Rails.cache.clear
+        allow(URI).to receive(:open).and_return(StringIO.new(html_content))
+        described_class.call(url: url, fields: css_fields)
+      end
+
+      it 'does not fetch HTML again' do
+        described_class.call(url: url, fields: css_fields)
+        expect(URI).to have_received(:open).once
+      end
     end
   end
 end
