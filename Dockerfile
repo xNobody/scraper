@@ -5,15 +5,18 @@
 # docker run -d -p 80:80 -p 443:443 --name my-app -e RAILS_MASTER_KEY=<value from config/master.key> my-app
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
-ARG RUBY_VERSION=3.1.0
+ARG RUBY_VERSION=3.3.0
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here
 WORKDIR /rails
 
 # Install base packages
+# RUN apt-get update -qq && \
+#     apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 && \
+#     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 && \
+    apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 libsqlite3-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set production environment
@@ -26,8 +29,11 @@ ENV RAILS_ENV="production" \
 FROM base AS build
 
 # Install packages needed to build gems
+# RUN apt-get update -qq && \
+#     apt-get install --no-install-recommends -y build-essential git pkg-config && \
+#     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git pkg-config && \
+    apt-get install --no-install-recommends -y build-essential git pkg-config libsqlite3-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
