@@ -1,14 +1,16 @@
 module Api
   class DataController < ApplicationController
+    ERROR_RESPONSE = { error: "Missing 'url' or 'fields'" }.freeze
+
     def index
       url, fields = extract_params
 
       if url.blank? || fields.blank?
-        render json: { error: "Missing 'url' or 'fields'" }, status: :bad_request
+        render json: ERROR_RESPONSE, status: :bad_request
         return
       end
 
-      fields = fields.is_a?(ActionController::Parameters) ? fields.permit!.to_h : fields
+      fields = normalize_fields(fields)
       result = HtmlScraper.call(url: url, fields: fields)
 
       render json: result
@@ -20,11 +22,21 @@ module Api
       if request.get?
         [ params[:url], params[:fields] || {} ]
       elsif request.post?
-        json = JSON.parse(request.body.read) rescue {}
+        json = parse_json_body
         [ json["url"], json["fields"] || {} ]
       else
         [ nil, {} ]
       end
+    end
+
+    def parse_json_body
+      JSON.parse(request.body.read)
+    rescue JSON::ParserError
+      {}
+    end
+
+    def normalize_fields(fields)
+      fields.is_a?(ActionController::Parameters) ? fields.permit!.to_h : fields
     end
   end
 end

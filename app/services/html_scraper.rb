@@ -3,6 +3,11 @@ require "open-uri"
 require "cgi"
 
 class HtmlScraper
+  API_KEY = "46cd9258e9e1e2a892d1e5e40a6135bd".freeze
+  CACHE_KEY_PREFIX = "scraper:".freeze
+  CACHE_TTL = 10.minutes
+  PROXY_URL_TEMPLATE = "https://api.scraperapi.com?api_key=%{api_key}&url=%{url}".freeze
+
   def self.call(url:, fields:)
     html = fetch_html(url)
     doc = Nokogiri::HTML.parse(html)
@@ -20,10 +25,10 @@ class HtmlScraper
   end
 
   def self.fetch_html(url)
-    api_key = "46cd9258e9e1e2a892d1e5e40a6135bd"
-    proxy_url = "https://api.scraperapi.com?api_key=#{api_key}&url=#{CGI.escape(url)}"
+    proxy_url = PROXY_URL_TEMPLATE % { api_key: API_KEY, url: CGI.escape(url) }
+    cache_key = "#{CACHE_KEY_PREFIX}#{url}"
 
-    Rails.cache.fetch("scraper:#{url}", expires_in: 10.minutes) do
+    Rails.cache.fetch(cache_key, expires_in: CACHE_TTL) do
       URI.open(proxy_url).read
     end
   end
