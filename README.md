@@ -39,24 +39,22 @@ Send JSON with a target URL and CSS/meta selectors.
 {
   "url": "https://www.alza.cz/aeg-7000-prosteam-lfr73964cc-d7635493.htm",
   "fields": {
-    "price": ".js-price-detail__main-price-box-wrapper .price-box__primary-price__value"
+    "price": ".js-price-detail__main-price-box-wrapper .price-box__primary-price__value",
     "rating_value": ".ratingValue",
     "rating_count": ".ratingCount",
-    "meta": ["keywords", "twitter:image"]
+    "meta": ["keywords","twitter:image"]
   }
 }
 </pre>
 🔸 Response
 <pre>
 {
-  "url": "https://www.alza.cz/aeg-7000-prosteam-lfr73964cc-d7635493.htm,
-  "fields": {
-    "price":  "19 490,-",
-    "rating_value":  "4,9",
-    "rating_count":  "25 hodnocení",
-    "meta":  {
-      "keywords":  "AEG,7000,ProSteam®,LFR73964CC,Automatické pračky,Automatické pračky AEG,Chytré pračky,Chytré pračky AEG",
-      "twitter:image":  "https://image.alza.cz/products/AEGPR065/AEGPR065.jpg?width=360&height=360"
+    "pricezzzz": "19 490,-",
+    "rating_value": "4,9",
+    "rating_count": "25 hodnocení",
+    "meta": {
+        "keywords": "AEG,7000,ProSteam®,LFR73964CC,Automatické pračky,Automatické pračky AEG,Chytré pračky,Chytré pračky AEG",
+        "twitter:image": "https://image.alza.cz/products/AEGPR065/AEGPR065.jpg?width=360&height=360"
     }
 }
 </pre>
