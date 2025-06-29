@@ -88,4 +88,4 @@ http://localhost:3000/api/data?url=https%3A%2F%2Fwww.alza.cz%2Faeg-7000-prosteam
     
 -   If you're using `GET`, ensure all field selectors are URL-encoded properly.
     
--   To force-refresh the cache, you can manually modify the cache logic or implement a `force` query para
+-   You can implement a `force=true` flag to bypass cached results if needed
