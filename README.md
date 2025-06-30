@@ -49,7 +49,7 @@ Send JSON with a target URL and CSS/meta selectors.
 🔸 Response
 <pre>
 {
-    "pricezzzz": "19 490,-",
+    "price": "19 490,-",
     "rating_value": "4,9",
     "rating_count": "25 hodnocení",
     "meta": {
@@ -61,7 +61,7 @@ Send JSON with a target URL and CSS/meta selectors.
 ### `GET /api/data`
 You can also send the same payload via query parameters:
 <pre>
-http://localhost:3000/api/data?url=https%3A%2F%2Fwww.alza.cz%2Faeg-7000-prosteam-lfr73964cc-d7635493.htm&fields[pricezzzz]=.js-price-detail__main-price-box-wrapper%20.price-box__primary-price__value&fields[rating_value]=.ratingValue&fields[rating_count]=.ratingCount&fields[meta][]=keywords&fields[meta][]=twitter:image
+http://localhost:3000/api/data?url=https%3A%2F%2Fwww.alza.cz%2Faeg-7000-prosteam-lfr73964cc-d7635493.htm&fields[price]=.js-price-detail__main-price-box-wrapper%20.price-box__primary-price__value&fields[rating_value]=.ratingValue&fields[rating_count]=.ratingCount&fields[meta][]=keywords&fields[meta][]=twitter:image
 </pre>
 
 ---
